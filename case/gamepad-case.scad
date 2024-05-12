@@ -23,6 +23,7 @@ screws = [
     [96-left, 137.25-top],        // bottom left
     [200-left, 137.25-top],       // bottom right
     [198.3232-left, 70.5104-top], // top right
+    [142, 5],
 ];
 
 function sx(l, w) = l + w/2;
@@ -35,7 +36,7 @@ switches = [
     [[0, 1.25],                          [1.5, 6.25]                            ], // Bottom row
 ];
 
-case_wall_thickness = 1.2;
+case_wall_thickness = 2;
 case_floor_thickness = 1;
 case_gap = 2;
 
@@ -134,7 +135,7 @@ mirror([0, 1, 0]) {
                 translate([pos[0], pos[1], -plate_gap])
                     linear_extrude(plate_gap)
                         difference() {
-                            circle(d = screw_shaft_d+1.2);
+                            circle(d = screw_shaft_d+2);
                             circle(d = screw_shaft_d+cutout_clearance);
                         }
             }
@@ -152,6 +153,31 @@ mirror([0, 1, 0]) {
                             circle(d = inserts_od - 0.5);
                         }
             }
+        }
+
+        // Walls
+        difference() {
+            translate([0, 0, plate_floor-2])
+                linear_extrude(2)
+                    difference() {
+                        translate([cutout_clearance, cutout_clearance])
+                            square([width-cutout_clearance*2, height-cutout_clearance*2]);
+                        translate([2, 2])
+                            square([width-4, height-4]);
+                    }
+
+            // Cutout for USB
+            translate([0, controller_height/2, pcb_ceiling+usb_thickness/2])
+                rotate([90, 0, 90])
+                    linear_extrude(case_wall_thickness*4, center = true)
+                        offset(r = 1)
+                            square([usb_width-1, usb_thickness-1], center = true);
+
+            // Cutout for power switch
+            translate([controller_width+15, 0, plate_ceiling/2])
+                rotate([90, 0, 0])
+                    linear_extrude(case_wall_thickness*4, center = true)
+                        square([6, 3], center = true);
         }
     }
 
