@@ -195,7 +195,7 @@ mirror([0, 1, 0]) {
         // Floor
         linear_extrude(case_floor_thickness)
             difference() {
-                square([width, height]);
+                square([width+0.55, height+0.55]);
                 for (pos = screws) translate(pos) circle(d = inserts_od-0.5);
             }
 
@@ -204,7 +204,7 @@ mirror([0, 1, 0]) {
             linear_extrude(plate_floor)
                 difference() {
                     offset(r = case_wall_thickness) square([width, height]);
-                    square([width, height]);
+                    square([width+0.55, height+0.55]);
                 }
 
             // Cutout for USB
